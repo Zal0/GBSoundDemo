@@ -1,0 +1,1 @@
+The sound sample that comes with the gbdk is broken. This is a fixed version 

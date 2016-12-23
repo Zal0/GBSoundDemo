@@ -901,9 +901,11 @@ void wait_event(UBYTE mode)
 			l = current_value(mode, y-FIRST_Y);
 			m = params[y-(FIRST_Y-1)].max;
 			if(l != m) {
-				if(KEY_PRESSED(J_A))
-					l = l > (m - 10) ? (l + 10) : m;
-				else if(KEY_PRESSED(J_B))
+				if(KEY_PRESSED(J_A)) {
+					l += 10;
+					if(l > m) 
+						l = m;
+				} else if(KEY_PRESSED(J_B))
 					l = m;
 				else
 					l++;
@@ -911,12 +913,11 @@ void wait_event(UBYTE mode)
 			}
 			gotoxy(VAL_X, y); print("    ");
 			gotoxy(VAL_X, y); println(l, 10, UNSIGNED);
-		} else if(input & J_START) {
+		} else if(KEY_TICKED(J_START)) {
 			//if(input & J_A)
 			//	play_music(mode);
 			//else
 				update_value(mode, PLAY, 1);
-			waitpadup();
 		} else if(input & J_SELECT) {
 			if(input & J_A)
 				dump_registers();
@@ -925,7 +926,6 @@ void wait_event(UBYTE mode)
 			waitpadup();
 			break;
 		}
-		//delay(250);
 		wait_vbl_done();
 		UPDATE_KEYS();
     }

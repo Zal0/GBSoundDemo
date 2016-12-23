@@ -841,17 +841,17 @@ void dump_registers()
 	print("Register Dump\n\n");
 
 	print("NR10:");println(NR10(), 16, UNSIGNED); 
-	print("NR11:");printn(NR11(), 16, UNSIGNED); print(" NR21:");println(NR21(), 16, UNSIGNED);
-	print("NR12:");printn(NR12(), 16, UNSIGNED); print(" NR22:");println(NR22(), 16, UNSIGNED);
-	print("NR13:");printn(NR13(), 16, UNSIGNED); print(" NR23:");println(NR23(), 16, UNSIGNED);
-	print("NR14:");printn(NR14(), 16, UNSIGNED); print(" NR24:");println(NR24(), 16, UNSIGNED);
+	print("NR11:");printn(NR11(), 16, UNSIGNED);        print(" NR21:");println(NR21(), 16, UNSIGNED);
+	print("NR12:");printn(NR12(), 16, UNSIGNED);        print(" NR22:");println(NR22(), 16, UNSIGNED);
+	print("NR13:");printn(NR13(), 16, UNSIGNED);        print(" NR23:");println(NR23(), 16, UNSIGNED);
+	print("NR14:");printn(0x80 | NR14(), 16, UNSIGNED); print(" NR24:");println(0x80 | NR24(), 16, UNSIGNED);
 	printf("\n");
 
 	print("NR30:");println(NR30(), 16, UNSIGNED); 
-	print("NR31:");printn(NR31(), 16, UNSIGNED); print(" NR41:");println(NR41(), 16, UNSIGNED);
-	print("NR32:");printn(NR32(), 16, UNSIGNED); print(" NR42:");println(NR42(), 16, UNSIGNED);
-	print("NR33:");printn(NR33(), 16, UNSIGNED); print(" NR43:");println(NR43(), 16, UNSIGNED);
-	print("NR34:");printn(NR34(), 16, UNSIGNED); print(" NR44:");println(NR44(), 16, UNSIGNED);
+	print("NR31:");printn(NR31(), 16, UNSIGNED);        print(" NR41:");println(NR41(), 16, UNSIGNED);
+	print("NR32:");printn(NR32(), 16, UNSIGNED);        print(" NR42:");println(NR42(), 16, UNSIGNED);
+	print("NR33:");printn(NR33(), 16, UNSIGNED);        print(" NR43:");println(NR43(), 16, UNSIGNED);
+	print("NR34:");printn(0x80 | NR34(), 16, UNSIGNED); print(" NR44:");println(0x80 | NR44(), 16, UNSIGNED);
 	printf("\n");
 
 	print("NR50:");println(NR50(), 16, UNSIGNED);

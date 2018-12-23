@@ -862,7 +862,7 @@ void dump_registers()
 
 void wait_event(UBYTE mode)
 {
-  UBYTE input, y, last_y;
+  UBYTE y, last_y;
   UWORD l;
   UWORD m;
 
@@ -874,7 +874,6 @@ void wait_event(UBYTE mode)
     setchar(ARROW_CHAR);
 
     while(1) {
-		input = joypad();
 		if(KEY_TICKED(J_UP)) {
 			gotoxy(ARROW_X, y); setchar(SPACE_CHAR);
 			if(--y < FIRST_Y)
@@ -919,12 +918,13 @@ void wait_event(UBYTE mode)
 			//	play_music(mode);
 			//else
 				update_value(mode, PLAY, 1);
-		} else if(input & J_SELECT) {
-			if(input & J_A)
+		} else if(KEY_PRESSED(J_SELECT)) {
+			if(KEY_PRESSED(J_A))
 				dump_registers();
 			else
 				mode = (mode+1) % NB_MODES;
 			waitpadup();
+			keys = 0;
 			break;
 		}
 		wait_vbl_done();

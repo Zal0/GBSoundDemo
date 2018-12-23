@@ -913,11 +913,13 @@ void wait_event(UBYTE mode)
 			}
 			gotoxy(VAL_X, y); print("    ");
 			gotoxy(VAL_X, y); println(l, 10, UNSIGNED);
+
 		} else if(KEY_TICKED(J_START)) {
-			//if(input & J_A)
-			//	play_music(mode);
-			//else
+			if (KEY_PRESSED(J_A))
+				play_music(mode);
+			else
 				update_value(mode, PLAY, 1);
+
 		} else if(KEY_PRESSED(J_SELECT)) {
 			if(KEY_PRESSED(J_A))
 				dump_registers();

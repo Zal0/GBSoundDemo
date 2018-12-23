@@ -28,7 +28,7 @@ BYTE keys;
 #define KEY_TICKED(K) ((keys & (K)) && !(previous_keys & (K)))
 
 
-void cls()  {
+void clss()  {
 	UINT8 i = 0;
 	for(i = 0; i < 18; ++i) {
 		gotoxy(0, i);
@@ -42,6 +42,7 @@ void print(const char* str) {
 
 const char hex[] = "0123456789ABCDEF";
 void printn(UWORD n, UINT8 base, UINT8 sign) {
+	(void) sign;
 	if(base == 16u) {
 		printf("%c", hex[0x000Fu & (n >> 4u)]);
 		printf("%c", hex[0x000Fu & (n)]);
@@ -806,7 +807,7 @@ UBYTE draw_screen(UBYTE mode)
 {
   UBYTE i;
 
-  cls();
+  clss();
   gotoxy(FIRST_X, TITLE_Y);
   print(params[0].name);
 
@@ -836,7 +837,7 @@ void play_music(UBYTE mode)
 
 void dump_registers()
 {
-	cls();
+	clss();
 	gotoxy(FIRST_X, TITLE_Y);
 	print("Register Dump\n\n");
 
@@ -967,7 +968,7 @@ void main()
   NR51_REG = NR51();
   NR52_REG = NR52();
 
-  cls();
+  clss();
 
   wait_event(1);
 }

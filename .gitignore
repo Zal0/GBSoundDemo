@@ -1,4 +1,1 @@
-*.lst
-*.map
-*.sym
-*.o
+obj/

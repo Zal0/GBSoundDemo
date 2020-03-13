@@ -1,4 +1,4 @@
-The sound sample that comes with the gbdk is broken. This is a fixed version 
+The sound sample that comes with the gbdk is broken. This is a fixed version
 
 Keys:
 - Select: change current channel menu
@@ -6,7 +6,8 @@ Keys:
 - Start + A: play a song
 - Arrows: navigate throught options
 - Arrows + A: Increments/Decrements current value by 10
-- Arrows + B: set Min/Max value to current option
+- Arrows + B: Increments/Decrements current value by 100
+- Arrows + A + B: set Min/Max value to current option
 - Select + A: Dump Registers
 
 

@@ -27,6 +27,7 @@ BYTE keys;
 #define KEY_PRESSED(K) (keys & (K))
 #define KEY_TICKED(K) ((keys & (K)) && !(previous_keys & (K)))
 
+void show_register_channel(UBYTE mode);
 
 void clss()  {
 	UINT8 i = 0;
@@ -175,105 +176,105 @@ struct Params *params;
 
 struct SoundReg {
   struct {
-    //NR10 0xFF10 
+    //NR10 0xFF10
     UINT16 sweepShifts     ;//: 3;
     UINT16 sweepMode       ;//: 1;
     UINT16 sweepTime       ;//: 3;
     UINT16 unused_1        ;//: 1;
 
-    //NR11 0xFF11 
+    //NR11 0xFF11
     UINT16 soundLength     ;//: 6;
     UINT16 patternDuty     ;//: 2;
 
-    //NR12 0xFF12 
+    //NR12 0xFF12
     UINT16 envNbSweep      ;//: 3;
     UINT16 envMode         ;//: 1;
     UINT16 envInitialValue ;//: 4;
 
-    //NR13 0xFF13 
+    //NR13 0xFF13
     UINT16 frequencyLow;
 
-    //NR14 0xFF14 
+    //NR14 0xFF14
     UINT16 frequencyHigh   ;//: 3;
     UINT16 unused_2        ;//: 3;
     UINT16 counter_ConsSel ;//: 1;
     UINT16 restart         ;//: 1;
   } mode1;
   struct {
-    //NR20 0xFF15 
+    //NR20 0xFF15
     UINT16 unused_1;
 
-    //NR21 0xFF16 
+    //NR21 0xFF16
     UINT16 soundLength     ;//: 6;
     UINT16 patternDuty     ;//: 2;
 
-    //NR22 0xFF17 
+    //NR22 0xFF17
     UINT16 envNbStep       ;//: 3;
     UINT16 envMode         ;//: 1;
     UINT16 envInitialValue ;//: 4;
 
-    //NR23 0xFF18 
+    //NR23 0xFF18
     UINT16 frequencyLow;
 
-    //NR24 0xFF19 
+    //NR24 0xFF19
     UINT16 frequencyHigh   ;//: 3;
     UINT16 unused_2        ;//: 3;
     UINT16 counter_ConsSel ;//: 1;
     UINT16 restart         ;//: 1;
   } mode2;
   struct {
-    //NR30 0xFF1A 
+    //NR30 0xFF1A
     UINT16 unused_1        ;//: 7;
     UINT16 on_Off          ;//: 1;
 
-    //NR31 0xFF1B 
+    //NR31 0xFF1B
     UINT16 soundLength;
 
-    //NR32 0xFF1C 
+    //NR32 0xFF1C
     UINT16 unused_2        ;//: 5;
     UINT16 selOutputLevel  ;//: 2;
     UINT16 unused_3        ;//: 1;
 
-    //NR33 0xFF1D 
+    //NR33 0xFF1D
     UINT16 frequencyLow;
 
-    //NR34 0xFF1E 
+    //NR34 0xFF1E
     UINT16 frequencyHigh   ;//: 3;
     UINT16 unused_4        ;//: 3;
     UINT16 counter_ConsSel ;//: 1;
     UINT16 restart         ;//: 1;
   } mode3;
   struct {
-    //NR40 0xFF1F 
+    //NR40 0xFF1F
     UINT16 unused_1;
 
-    //NR41 0xFF20 
+    //NR41 0xFF20
     UINT16 soundLength     ;//: 6;
     UINT16 unused_2        ;//: 2;
 
-    //NR42 0xFF21 
+    //NR42 0xFF21
     UINT16 envNbStep       ;//: 3;
     UINT16 envMode         ;//: 1;
     UINT16 envInitialValue ;//: 4;
 
-    //NR43 0xFF22 
+    //NR43 0xFF22
     UINT16 polyCounterDiv  ;//: 3;
     UINT16 polyCounterStep ;//: 1;
     UINT16 polyCounterFreq ;//: 4;
 
-    //NR44 0xFF23 
+    //NR44 0xFF23
     UINT16 unused_3        ;//: 6;
     UINT16 counter_ConsSel ;//: 1;
     UINT16 restart         ;//: 1;
   } mode4;
   struct {
-    // NR50 0xFF24 
+    // NR50 0xFF24
     UINT16 SO1_OutputLevel ;//: 3;
     UINT16 Vin_SO1         ;//: 1;
     UINT16 SO2_OutputLevel ;//: 3;
     UINT16 Vin_SO2         ;//: 1;
 
-    // NR51 0xFF25 
+    // NR51 0xFF25
     UINT16 Sound1_To_SO1   ;//: 1;
     UINT16 Sound2_To_SO1   ;//: 1;
     UINT16 Sound3_To_SO1   ;//: 1;
@@ -283,7 +284,7 @@ struct SoundReg {
     UINT16 Sound3_To_SO2   ;//: 1;
     UINT16 Sound4_To_SO2   ;//: 1;
 
-    // NR52 0xFF26 
+    // NR52 0xFF26
     UINT16 Sound1_On_Off   ;//: 1;
     UINT16 Sound2_On_Off   ;//: 1;
     UINT16 Sound3_On_Off   ;//: 1;
@@ -397,14 +398,14 @@ UBYTE NR44() {
 }
 
 //-------------------------------
-UBYTE NR50() {	
-	return soundReg->control.SO1_OutputLevel | (soundReg->control.Vin_SO1 << 3u) | (soundReg->control.SO2_OutputLevel << 4u) | 
+UBYTE NR50() {
+	return soundReg->control.SO1_OutputLevel | (soundReg->control.Vin_SO1 << 3u) | (soundReg->control.SO2_OutputLevel << 4u) |
 	           (soundReg->control.Vin_SO2 << 7u);
 }
 
 UBYTE NR51() {
-	return soundReg->control.Sound1_To_SO1 | (soundReg->control.Sound2_To_SO1 << 1) | (soundReg->control.Sound3_To_SO1 << 2) | 
-	          (soundReg->control.Sound4_To_SO1 << 3) | (soundReg->control.Sound1_To_SO2 << 4) | (soundReg->control.Sound2_To_SO2 << 5) | 
+	return soundReg->control.Sound1_To_SO1 | (soundReg->control.Sound2_To_SO1 << 1) | (soundReg->control.Sound3_To_SO1 << 2) |
+	          (soundReg->control.Sound4_To_SO1 << 3) | (soundReg->control.Sound1_To_SO2 << 4) | (soundReg->control.Sound2_To_SO2 << 5) |
 			  (soundReg->control.Sound3_To_SO2 << 6)| (soundReg->control.Sound4_To_SO2 << 7);
 }
 
@@ -418,118 +419,118 @@ UWORD current_value(UBYTE mode, UBYTE line)
   if(mode == 0) {
     switch(line)
       {
-      case 0: // global_On_Off 
+      case 0: // global_On_Off
 	return soundReg->control.global_On_Off;
-      case 1: // Vin_SO1 
+      case 1: // Vin_SO1
 	return soundReg->control.Vin_SO1;
-      case 2: // Vin_SO2 
+      case 2: // Vin_SO2
 	return soundReg->control.Vin_SO2;
-      case 3: // SO1_OutputLevel 
+      case 3: // SO1_OutputLevel
 	return soundReg->control.SO1_OutputLevel;
-      case 4: // SO2_OutputLevel 
+      case 4: // SO2_OutputLevel
 	return soundReg->control.SO2_OutputLevel;
       }
   } else if(mode == 1) {
     switch(line)
       {
-      case 0: // sweepTime 
+      case 0: // sweepTime
 	return soundReg->mode1.sweepTime;
-      case 1: // sweepMode 
+      case 1: // sweepMode
 	return soundReg->mode1.sweepMode;
-      case 2: // sweepShifts 
+      case 2: // sweepShifts
 	return soundReg->mode1.sweepShifts;
-      case 3: // patternDuty 
+      case 3: // patternDuty
 	return soundReg->mode1.patternDuty;
-      case 4: // soundLength 
+      case 4: // soundLength
 	return soundReg->mode1.soundLength;
-      case 5: // envInitialValue 
+      case 5: // envInitialValue
 	return soundReg->mode1.envInitialValue;
-      case 6: // envMode 
+      case 6: // envMode
 	return soundReg->mode1.envMode;
-      case 7: // envNbSweep 
+      case 7: // envNbSweep
 	return soundReg->mode1.envNbSweep;
-      case 8: // frequency 
+      case 8: // frequency
       case FREQUENCY:
 	return (soundReg->mode1.frequencyHigh << 8) | soundReg->mode1.frequencyLow;
-      case 9: // counter_ConsSel 
+      case 9: // counter_ConsSel
 	return soundReg->mode1.counter_ConsSel;
-      case 10: // Sound1_To_SO1 
+      case 10: // Sound1_To_SO1
 	return soundReg->control.Sound1_To_SO1;
-      case 11: // Sound1_To_SO2 
+      case 11: // Sound1_To_SO2
 	return soundReg->control.Sound1_To_SO2;
-      case 12: // Sound1_On_Off 
+      case 12: // Sound1_On_Off
 	return soundReg->control.Sound1_On_Off;
       }
   } else if(mode == 2) {
     switch(line)
       {
-      case 0: // patternDuty 
+      case 0: // patternDuty
 	return soundReg->mode2.patternDuty;
-      case 1: // soundLength 
+      case 1: // soundLength
 	return soundReg->mode2.soundLength;
-      case 2: // envInitialValue 
+      case 2: // envInitialValue
 	return soundReg->mode2.envInitialValue;
-      case 3: // envMode 
+      case 3: // envMode
 	return soundReg->mode2.envMode;
-      case 4: // envNbStep 
+      case 4: // envNbStep
 	return soundReg->mode2.envNbStep;
-      case 5: // frequency 
+      case 5: // frequency
       case FREQUENCY:
 	return (soundReg->mode2.frequencyHigh << 8) | soundReg->mode2.frequencyLow;
-      case 6: // counter_ConsSel 
+      case 6: // counter_ConsSel
 	return soundReg->mode2.counter_ConsSel;
-      case 7: // Sound2_To_SO1 
+      case 7: // Sound2_To_SO1
 	return soundReg->control.Sound2_To_SO1;
-      case 8: // Sound2_To_SO2 
+      case 8: // Sound2_To_SO2
 	return soundReg->control.Sound2_To_SO2;
-      case 9: // Sound2_On_Off 
+      case 9: // Sound2_On_Off
 	return soundReg->control.Sound2_On_Off;
       }
   } else if(mode == 3) {
     switch(line)
       {
-      case 0: // on_Off 
+      case 0: // on_Off
 	return soundReg->mode3.on_Off;
-      case 1: // soundLength 
+      case 1: // soundLength
 	return soundReg->mode3.soundLength;
-      case 2: // selOutputLevel 
+      case 2: // selOutputLevel
 	return soundReg->mode3.selOutputLevel;
-      case 3: // frequency 
+      case 3: // frequency
       case FREQUENCY:
 	return (soundReg->mode3.frequencyHigh << 8) | soundReg->mode3.frequencyLow;
-      case 4: // counter_ConsSel 
+      case 4: // counter_ConsSel
 	return soundReg->mode3.counter_ConsSel;
-      case 5: // Sound3_To_SO1 
+      case 5: // Sound3_To_SO1
 	return soundReg->control.Sound3_To_SO1;
-      case 6: // Sound3_To_SO2 
+      case 6: // Sound3_To_SO2
 	return soundReg->control.Sound3_To_SO2;
-      case 7: // Sound3_On_Off 
+      case 7: // Sound3_On_Off
 	return soundReg->control.Sound3_On_Off;
       }
   } else if(mode == 4) {
     switch(line)
       {
-      case 0: // soundLength 
+      case 0: // soundLength
 	return soundReg->mode4.soundLength;
-      case 1: // envInitialValue 
+      case 1: // envInitialValue
 	return soundReg->mode4.envInitialValue;
-      case 2: // envMode 
+      case 2: // envMode
 	return soundReg->mode4.envMode;
-      case 3: // envNbStep 
+      case 3: // envNbStep
 	return soundReg->mode4.envNbStep;
-      case 4: // polyCounterFreq 
+      case 4: // polyCounterFreq
 	return soundReg->mode4.polyCounterFreq;
-      case 5: // polyCounterStep 
+      case 5: // polyCounterStep
 	return soundReg->mode4.polyCounterStep;
-      case 6: // polyCounterDiv 
+      case 6: // polyCounterDiv
 	return soundReg->mode4.polyCounterDiv;
-      case 7: // counter_ConsSel 
+      case 7: // counter_ConsSel
 	return soundReg->mode4.counter_ConsSel;
-      case 8: // Sound4_To_SO1 
+      case 8: // Sound4_To_SO1
 	return soundReg->control.Sound4_To_SO1;
-      case 9: // Sound4_To_SO2 
+      case 9: // Sound4_To_SO2
 	return soundReg->control.Sound4_To_SO2;
-      case 10: // Sound4_On_Off 
+      case 10: // Sound4_On_Off
 	return soundReg->control.Sound4_On_Off;
       }
   }
@@ -541,23 +542,23 @@ void update_value(UBYTE mode, UBYTE line, UWORD value)
   if(mode == 0) {
     switch(line)
       {
-      case 0: // global_On_Off 
+      case 0: // global_On_Off
 	soundReg->control.global_On_Off = value;
 	NR52_REG = NR52();
 	break;
-      case 1: // Vin_SO1 
+      case 1: // Vin_SO1
 	soundReg->control.Vin_SO1 = value;
 	NR50_REG = NR50();
 	break;
-      case 2: // Vin_SO2 
+      case 2: // Vin_SO2
 	soundReg->control.Vin_SO2 = value;
 	NR50_REG = NR50();
 	break;
-      case 3: // SO1_OutputLevel 
+      case 3: // SO1_OutputLevel
 	soundReg->control.SO1_OutputLevel = value;
 	NR50_REG = NR50();
 	break;
-      case 4: // SO2_OutputLevel 
+      case 4: // SO2_OutputLevel
 	soundReg->control.SO2_OutputLevel = value;
 	NR50_REG = NR50();
 	break;
@@ -566,7 +567,7 @@ void update_value(UBYTE mode, UBYTE line, UWORD value)
 	update_value(2, FREQUENCY, value);
 	update_value(3, FREQUENCY, value);
 	break;
-      case PLAY: // restart 
+      case PLAY: // restart
 	update_value(1, FREQUENCY, current_value(1, FREQUENCY));
 	update_value(2, FREQUENCY, current_value(2, FREQUENCY));
 	update_value(3, FREQUENCY, current_value(3, FREQUENCY));
@@ -587,62 +588,62 @@ void update_value(UBYTE mode, UBYTE line, UWORD value)
   } else if(mode == 1) {
     switch(line)
       {
-      case 0: // sweepTime 
+      case 0: // sweepTime
 	soundReg->mode1.sweepTime = value;
 	NR10_REG = NR10();
 	break;
-      case 1: // sweepMode 
+      case 1: // sweepMode
 	soundReg->mode1.sweepMode = value;
 	NR10_REG = NR10();
 	break;
-      case 2: // sweepShifts 
+      case 2: // sweepShifts
 	soundReg->mode1.sweepShifts = value;
 	NR10_REG = NR10();
 	break;
-      case 3: // patternDuty 
+      case 3: // patternDuty
 	soundReg->mode1.patternDuty = value;
 	NR11_REG = NR11();
 	break;
-      case 4: // soundLength 
+      case 4: // soundLength
 	soundReg->mode1.soundLength = value;
 	NR11_REG = NR11();
 	break;
-      case 5: // envInitialValue 
+      case 5: // envInitialValue
 	soundReg->mode1.envInitialValue = value;
 	NR12_REG = NR12();
 	break;
-      case 6: // envMode 
+      case 6: // envMode
 	soundReg->mode1.envMode = value;
 	NR12_REG = NR12();
 	break;
-      case 7: // envNbSweep 
+      case 7: // envNbSweep
 	soundReg->mode1.envNbSweep = value;
 	NR12_REG = NR12();
 	break;
-      case 8: // frequency 
+      case 8: // frequency
       case FREQUENCY:
 	soundReg->mode1.frequencyHigh = value >> 8;
 	soundReg->mode1.frequencyLow  = 0xFF & value;
 	NR13_REG = NR13();
 	NR14_REG = NR14();
 	break;
-      case 9: // counter_ConsSel 
+      case 9: // counter_ConsSel
 	soundReg->mode1.counter_ConsSel = value;
 	NR14_REG = NR14();
 	break;
-      case 10: // Sound1_To_SO1 
+      case 10: // Sound1_To_SO1
 	soundReg->control.Sound1_To_SO1 = value;
 	NR51_REG = NR51();
 	break;
-      case 11: // Sound1_To_SO2 
+      case 11: // Sound1_To_SO2
 	soundReg->control.Sound1_To_SO2 = value;
 	NR51_REG = NR51();
 	break;
-      case 12: // Sound1_On_Off 
+      case 12: // Sound1_On_Off
 	soundReg->control.Sound1_On_Off = value;
 	NR52_REG = NR52();
 	break;
-      case PLAY: // restart 
+      case PLAY: // restart
 	update_value(mode, FREQUENCY, current_value(mode, FREQUENCY));
 	soundReg->mode1.restart = value;
 	NR14_REG = NR14();
@@ -652,50 +653,50 @@ void update_value(UBYTE mode, UBYTE line, UWORD value)
   } else if(mode == 2) {
     switch(line)
       {
-      case 0: // patternDuty 
+      case 0: // patternDuty
 	soundReg->mode2.patternDuty = value;
 	NR21_REG = NR21();
 	break;
-      case 1: // soundLength 
+      case 1: // soundLength
 	soundReg->mode2.soundLength = value;
 	NR21_REG = NR21();
 	break;
-      case 2: // envInitialValue 
+      case 2: // envInitialValue
 	soundReg->mode2.envInitialValue = value;
 	NR22_REG = NR22();
 	break;
-      case 3: // envMode 
+      case 3: // envMode
 	soundReg->mode2.envMode = value;
 	NR22_REG = NR22();
 	break;
-      case 4: // envNbStep 
+      case 4: // envNbStep
 	soundReg->mode2.envNbStep = value;
 	NR22_REG = NR22();
 	break;
-      case 5: // frequency 
+      case 5: // frequency
       case FREQUENCY:
 	soundReg->mode2.frequencyHigh = value >> 8;
 	soundReg->mode2.frequencyLow  = 0xFF & value;
 	NR23_REG = NR23();
 	NR24_REG = NR24();
 	break;
-      case 6: // counter_ConsSel 
+      case 6: // counter_ConsSel
 	soundReg->mode2.counter_ConsSel = value;
 	NR24_REG = NR24();
 	break;
-      case 7: // Sound2_To_SO1 
+      case 7: // Sound2_To_SO1
 	soundReg->control.Sound2_To_SO1 = value;
 	NR51_REG = NR51();
 	break;
-      case 8: // Sound2_To_SO2 
+      case 8: // Sound2_To_SO2
 	soundReg->control.Sound2_To_SO2 = value;
 	NR51_REG = NR51();
 	break;
-      case 9: // Sound2_On_Off 
+      case 9: // Sound2_On_Off
 	soundReg->control.Sound2_On_Off = value;
 	NR52_REG = NR52();
 	break;
-      case PLAY: // restart 
+      case PLAY: // restart
 	update_value(mode, FREQUENCY, current_value(mode, FREQUENCY));
 	soundReg->mode2.restart = value;
 	NR24_REG = NR24();
@@ -705,42 +706,42 @@ void update_value(UBYTE mode, UBYTE line, UWORD value)
   } else if(mode == 3) {
     switch(line)
       {
-      case 0: // on_Off 
+      case 0: // on_Off
 	soundReg->mode3.on_Off = value;
 	NR30_REG = NR30();
 	break;
-      case 1: // soundLength 
+      case 1: // soundLength
 	soundReg->mode3.soundLength = value;
 	NR31_REG = NR31();
 	break;
-      case 2: // selOutputLevel 
+      case 2: // selOutputLevel
 	soundReg->mode3.selOutputLevel = value;
 	NR32_REG = NR32();
 	break;
-      case 3: // frequency 
+      case 3: // frequency
       case FREQUENCY:
 	soundReg->mode3.frequencyHigh = value >> 8;
 	soundReg->mode3.frequencyLow  = 0xFF & value;
 	NR33_REG = NR33();
 	NR34_REG = NR34();
 	break;
-      case 4: // counter_ConsSel 
+      case 4: // counter_ConsSel
 	soundReg->mode3.counter_ConsSel = value;
 	NR34_REG = NR34();
 	break;
-      case 5: // Sound3_To_SO1 
+      case 5: // Sound3_To_SO1
 	soundReg->control.Sound3_To_SO1 = value;
 	NR51_REG = NR51();
 	break;
-      case 6: // Sound3_To_SO2 
+      case 6: // Sound3_To_SO2
 	soundReg->control.Sound3_To_SO2 = value;
 	NR51_REG = NR51();
 	break;
-      case 7: // Sound3_On_Off 
+      case 7: // Sound3_On_Off
 	soundReg->control.Sound3_On_Off = value;
 	NR52_REG = NR52();
 	break;
-      case PLAY: // restart 
+      case PLAY: // restart
 	update_value(mode, FREQUENCY, current_value(mode, FREQUENCY));
 	soundReg->mode3.restart = value;
 	NR34_REG = NR34();
@@ -750,39 +751,39 @@ void update_value(UBYTE mode, UBYTE line, UWORD value)
   } else if(mode == 4) {
     switch(line)
       {
-      case 0: // soundLength 
+      case 0: // soundLength
 	soundReg->mode4.soundLength = value;
 	NR41_REG = NR41();
 	break;
-      case 1: // envInitialValue 
+      case 1: // envInitialValue
 	soundReg->mode4.envInitialValue = value;
 	NR42_REG = NR42();
 	break;
-      case 2: // envMode 
+      case 2: // envMode
 	soundReg->mode4.envMode = value;
 	NR42_REG = NR42();
 	break;
-      case 3: // envNbStep 
+      case 3: // envNbStep
 	soundReg->mode4.envNbStep = value;
 	NR42_REG = NR42();
 	break;
-      case 4: // polyCounterFreq 
+      case 4: // polyCounterFreq
 	soundReg->mode4.polyCounterFreq = value;
 	NR43_REG = NR43();
 	break;
-      case 5: // polyCounterStep 
+      case 5: // polyCounterStep
 	soundReg->mode4.polyCounterStep = value;
 	NR43_REG = NR43();
 	break;
-      case 6: // polyCounterDiv 
+      case 6: // polyCounterDiv
 	soundReg->mode4.polyCounterDiv = value;
 	NR43_REG = NR43();
 	break;
-      case 7: // counter_ConsSel 
+      case 7: // counter_ConsSel
 	soundReg->mode4.counter_ConsSel = value;
 	NR44_REG = NR44();
 	break;
-      case 8: // Sound4_To_SO1 
+      case 8: // Sound4_To_SO1
 	soundReg->control.Sound4_To_SO1 = value;
 	NR51_REG = NR51();
 	break;
@@ -794,7 +795,7 @@ void update_value(UBYTE mode, UBYTE line, UWORD value)
 	soundReg->control.Sound4_On_Off = value;
 	NR52_REG = NR52();
 	break;
-      case PLAY: // restart 
+      case PLAY: // restart
 	soundReg->mode4.restart = value;
 	NR44_REG = NR44();
 	soundReg->mode4.restart = 0;
@@ -817,6 +818,7 @@ UBYTE draw_screen(UBYTE mode)
     gotoxy(VAL_X, FIRST_Y+i);
     println(current_value(mode, i), 10, UNSIGNED);
   }
+
   return i-1;
 }
 
@@ -835,20 +837,89 @@ void play_music(UBYTE mode)
   }
 }
 
+
+void show_register_channel(UBYTE mode) {
+
+    switch (mode) {
+        case 1:
+            gotoxy(0, 16);
+            print("NR10-14:");
+
+            gotoxy(1, 17); // Last line
+            printn(NR10(), 16, UNSIGNED); print(", ");
+            printn(NR11(), 16, UNSIGNED); print(", ");
+            printn(NR12(), 16, UNSIGNED); print(", ");
+            printn(NR13(), 16, UNSIGNED); print(", ");
+            printn(0x80 | NR14(), 16, UNSIGNED);
+
+            break;
+
+        case 2:
+            gotoxy(0, 16);
+            print("NR21-24:");
+
+            gotoxy(1, 17); // Last line
+            printn(NR21(), 16, UNSIGNED); print(", ");
+            printn(NR22(), 16, UNSIGNED); print(", ");
+            printn(NR23(), 16, UNSIGNED); print(", ");
+            printn(0x80 | NR24(), 16, UNSIGNED);
+
+            break;
+
+        case 3:
+            gotoxy(0, 16);
+            print("NR30-34:");
+
+            gotoxy(1, 17); // Last line
+            printn(NR30(), 16, UNSIGNED); print(", ");
+            printn(NR31(), 16, UNSIGNED); print(", ");
+            printn(NR32(), 16, UNSIGNED); print(", ");
+            printn(NR33(), 16, UNSIGNED); print(", ");
+            printn(0x80 | NR34(), 16, UNSIGNED);
+
+            break;
+
+        case 4:
+            gotoxy(0, 16);
+            print("NR41-44:");
+
+            gotoxy(1, 17); // Last line
+            printn(NR41(), 16, UNSIGNED); print(", ");
+            printn(NR42(), 16, UNSIGNED); print(", ");
+            printn(NR43(), 16, UNSIGNED); print(", ");
+            printn(0x80 | NR44(), 16, UNSIGNED);
+
+            break;
+
+        case 0:
+            gotoxy(0, 16);
+            print("NR50-52:");
+
+            gotoxy(1, 17); // Last line
+            printn(NR50(), 16, UNSIGNED); print(", ");
+            printn(NR51(), 16, UNSIGNED); print(", ");
+            printn(NR52(), 16, UNSIGNED); print(", ");
+
+            break;
+
+    }
+}
+
+
 void dump_registers()
 {
 	clss();
 	gotoxy(FIRST_X, TITLE_Y);
 	print("Register Dump\n\n");
 
-	print("NR10:");println(NR10(), 16, UNSIGNED); 
+	print("NR10:");println(NR10(), 16, UNSIGNED);
 	print("NR11:");printn(NR11(), 16, UNSIGNED);        print(" NR21:");println(NR21(), 16, UNSIGNED);
 	print("NR12:");printn(NR12(), 16, UNSIGNED);        print(" NR22:");println(NR22(), 16, UNSIGNED);
 	print("NR13:");printn(NR13(), 16, UNSIGNED);        print(" NR23:");println(NR23(), 16, UNSIGNED);
 	print("NR14:");printn(0x80 | NR14(), 16, UNSIGNED); print(" NR24:");println(0x80 | NR24(), 16, UNSIGNED);
 	printf("\n");
 
-	print("NR30:");println(NR30(), 16, UNSIGNED); 
+	print("NR30:");println(NR30(), 16, UNSIGNED);
 	print("NR31:");printn(NR31(), 16, UNSIGNED);        print(" NR41:");println(NR41(), 16, UNSIGNED);
 	print("NR32:");printn(NR32(), 16, UNSIGNED);        print(" NR42:");println(NR42(), 16, UNSIGNED);
 	print("NR33:");printn(NR33(), 16, UNSIGNED);        print(" NR43:");println(NR43(), 16, UNSIGNED);
@@ -863,8 +934,8 @@ void dump_registers()
 void wait_event(UBYTE mode)
 {
   UBYTE y, last_y;
-  UWORD l;
-  UWORD m;
+  UWORD l = 0;
+  UWORD m = 0;
 
   while(1) {
     params = params_array[mode];
@@ -873,46 +944,69 @@ void wait_event(UBYTE mode)
     gotoxy(ARROW_X, y);
     setchar(ARROW_CHAR);
 
+    // Some versions of the GBDK compiler fail to set Y correctly in the
+    // above code when it's also used in calling gotoxy(). Y ends up
+    // being Zero instead of FIRST_Y(2). So re-set it again here to
+    // work around to avoid the compiler optimizaion bug.
+    y = FIRST_Y;
+
+    show_register_channel(mode);
+
     while(1) {
 		if(KEY_TICKED(J_UP)) {
 			gotoxy(ARROW_X, y); setchar(SPACE_CHAR);
 			if(--y < FIRST_Y)
 			  y = last_y;
 			gotoxy(ARROW_X, y); setchar(ARROW_CHAR);
+
 		} else if(KEY_TICKED(J_DOWN)) {
 			gotoxy(ARROW_X, y); setchar(SPACE_CHAR);
 			if(++y > last_y)
 			  y = FIRST_Y;
 			gotoxy(ARROW_X, y); setchar(ARROW_CHAR);
+
 		} else if(KEY_TICKED(J_LEFT)) {
 			l = current_value(mode, y-FIRST_Y);
 			if(l != 0) {
-				if(KEY_PRESSED(J_A))
+                if(KEY_PRESSED(J_A) && KEY_PRESSED(J_B))
+                    l = 0;
+				else if(KEY_PRESSED(J_A))
 					l = (l > 10) ? (l - 10) : 0;
-				else if(KEY_PRESSED(J_B))
-					l = 0;
+                else if(KEY_PRESSED(J_B))
+                    l = (l > 100) ? (l - 100) : 0;
 				else
 					l--;
 				update_value(mode, y-FIRST_Y, l);
-			} 
+			}
 			gotoxy(VAL_X, y); print("    ");
-			gotoxy(VAL_X, y); println(l, 10, UNSIGNED);			
+			gotoxy(VAL_X, y); println(l, 10, UNSIGNED);
+
+            show_register_channel(mode);
+
 		} else if(KEY_TICKED(J_RIGHT)) {
 			l = current_value(mode, y-FIRST_Y);
 			m = params[y-(FIRST_Y-1)].max;
 			if(l != m) {
-				if(KEY_PRESSED(J_A)) {
+                if(KEY_PRESSED(J_A) && KEY_PRESSED(J_B)) {
+                    l = m;
+                }
+				else if(KEY_PRESSED(J_A)) {
 					l += 10;
-					if(l > m) 
+					if(l > m)
 						l = m;
-				} else if(KEY_PRESSED(J_B))
-					l = m;
+				} else if(KEY_PRESSED(J_B)) {
+                    l += 100;
+                    if(l > m)
+                        l = m;
+                }
 				else
 					l++;
 				update_value(mode, y-FIRST_Y, l);
 			}
 			gotoxy(VAL_X, y); print("    ");
 			gotoxy(VAL_X, y); println(l, 10, UNSIGNED);
+
+            show_register_channel(mode);
 
 		} else if(KEY_TICKED(J_START)) {
 			if (KEY_PRESSED(J_A))
@@ -923,8 +1017,9 @@ void wait_event(UBYTE mode)
 		} else if(KEY_PRESSED(J_SELECT)) {
 			if(KEY_PRESSED(J_A))
 				dump_registers();
-			else
+			else {
 				mode = (mode+1) % NB_MODES;
+            }
 			waitpadup();
 			keys = 0;
 			break;

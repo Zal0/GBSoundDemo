@@ -390,7 +390,7 @@ UBYTE NR42() {
 }
 
 UBYTE NR43() {
-	return soundReg->mode4.polyCounterDiv | (soundReg->mode4.polyCounterFreq << 3) | (soundReg->mode4.polyCounterFreq << 4);
+	return soundReg->mode4.polyCounterDiv | (soundReg->mode4.polyCounterStep << 3) | (soundReg->mode4.polyCounterFreq << 4);
 }
 
 UBYTE NR44() {
